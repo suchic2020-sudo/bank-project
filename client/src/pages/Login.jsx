@@ -15,7 +15,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('https://bank-project-jtvq.onrender.com/api/auth/login', formData, { withCredentials: true });
+            const res = await axios.post('http://localhost:5000/api/auth/login', formData, { withCredentials: true });
             localStorage.setItem('user', JSON.stringify(res.data.user));
             navigate('/dashboard');
         } catch (err) {

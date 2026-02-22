@@ -19,7 +19,7 @@ const Dashboard = () => {
         setLoading(true);
         try {
             const res = await axios.get(
-                "https://bank-project-jtvq.onrender.com/api/user/balance",
+                "http://localhost:5000/api/user/balance",
                 { withCredentials: true }
             );
             setBalance(res.data.balance || 0);
