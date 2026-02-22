@@ -6,7 +6,7 @@ import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/bank-project">
       <div className="min-h-screen bg-background text-foreground">
         <Routes>
           <Route path="/login" element={<Login />} />
