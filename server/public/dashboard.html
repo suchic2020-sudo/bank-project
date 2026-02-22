@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kodbank - Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="dark-theme">
+    <div class="container dashboard-container">
+        <div id="dashboard-box" class="card balance-card">
+            <h1>Kodbank Dashboard</h1>
+            <div class="user-info">
+                Welcome, <span id="display-username">User</span>!
+            </div>
+            
+            <div id="balance-section" class="hidden">
+                <p>Your Current Balance</p>
+                <div class="balance-amount" id="balance-value">₹ 0.00</div>
+            </div>
+            
+            <div id="action-section">
+                <button id="check-balance-btn" class="btn primary">Check Balance</button>
+            </div>
+            
+            <button id="logout-btn" class="btn secondary">Logout</button>
+        </div>
+    </div>
+    <script src="dashboard.js"></script>
+</body>
+</html>
