@@ -1,126 +1,110 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { UserPlus, User, Mail, Phone, Lock } from 'lucide-react';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
-    const [formData, setFormData] = useState({
-        uid: '',
-        username: '',
-        email: '',
-        phone: '',
-        password: ''
-    });
-    const [error, setError] = useState('');
     const navigate = useNavigate();
 
+    const [form, setForm] = useState({
+        username: "",
+        name: "",
+        email: "",
+        phone: "",
+        password: "",
+    });
+
+    const [error, setError] = useState("");
+
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        setForm({ ...form, [e.target.name]: e.target.value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        try {
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const userExists = users.some(u => u.username === formData.username);
 
-            if (userExists) {
-                setError('Username already exists');
-                return;
-            }
+        let users = JSON.parse(localStorage.getItem("users") || "[]");
 
-            const newUser = {
-                ...formData,
-                balance: 0
-            };
-
-            users.push(newUser);
-            localStorage.setItem('users', JSON.stringify(users));
-            navigate('/login');
-        } catch (err) {
-            setError('Registration failed');
+        // check duplicate username
+        const exists = users.find(u => u.username === form.username);
+        if (exists) {
+            setError("Username already exists");
+            return;
         }
+
+        const newUser = {
+            ...form,
+            balance: 100000
+        };
+
+        users.push(newUser);
+
+        localStorage.setItem("users", JSON.stringify(users));
+        localStorage.setItem("user", JSON.stringify(newUser));
+
+        navigate("/dashboard");
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen px-4">
-            <div className="w-full max-w-md p-8 rounded-2xl bg-card border border-neutral-800 shadow-2xl">
-                <div className="flex flex-col items-center mb-8">
-                    <div className="p-3 bg-accent/10 rounded-full mb-4">
-                        <UserPlus className="w-8 h-8 text-accent" />
-                    </div>
-                    <h1 className="text-3xl font-bold">Create Account</h1>
-                    <p className="text-neutral-400 mt-2">Join Kodbank today</p>
-                </div>
+        <div className="flex min-h-screen items-center justify-center bg-gray-900 text-white">
+            <div className="bg-gray-800 p-8 rounded-xl w-96 shadow-lg">
 
-                {error && <div className="p-3 mb-6 text-sm text-red-500 bg-red-500/10 rounded-lg border border-red-500/20">{error}</div>}
+                <h2 className="text-2xl font-bold mb-6 text-center">
+                    Create Account
+                </h2>
 
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                        <input
-                            type="text"
-                            name="uid"
-                            placeholder="Unique ID"
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 bg-background border border-neutral-800 rounded-xl focus:ring-2 focus:ring-accent outline-none transition-all"
-                        />
-                    </div>
-                    <div className="relative">
-                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                        <input
-                            type="text"
-                            name="username"
-                            placeholder="Username"
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 bg-background border border-neutral-800 rounded-xl focus:ring-2 focus:ring-accent outline-none transition-all"
-                        />
-                    </div>
-                    <div className="relative">
-                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                        <input
-                            type="email"
-                            name="email"
-                            placeholder="Email Address"
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 bg-background border border-neutral-800 rounded-xl focus:ring-2 focus:ring-accent outline-none transition-all"
-                        />
-                    </div>
-                    <div className="relative">
-                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                        <input
-                            type="text"
-                            name="phone"
-                            placeholder="Phone Number"
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 bg-background border border-neutral-800 rounded-xl focus:ring-2 focus:ring-accent outline-none transition-all"
-                        />
-                    </div>
-                    <div className="relative">
-                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Password"
-                            onChange={handleChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 bg-background border border-neutral-800 rounded-xl focus:ring-2 focus:ring-accent outline-none transition-all"
-                        />
-                    </div>
+                {error && (
+                    <p className="bg-red-500 p-2 mb-3 rounded text-center">{error}</p>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-3">
+
+                    <input
+                        name="username"
+                        placeholder="Username"
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 rounded bg-gray-700"
+                    />
+
+                    <input
+                        name="name"
+                        placeholder="Name"
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 rounded bg-gray-700"
+                    />
+
+                    <input
+                        name="email"
+                        placeholder="Email"
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 rounded bg-gray-700"
+                    />
+
+                    <input
+                        name="phone"
+                        placeholder="Phone"
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 rounded bg-gray-700"
+                    />
+
+                    <input
+                        name="password"
+                        type="password"
+                        placeholder="Password"
+                        onChange={handleChange}
+                        required
+                        className="w-full p-2 rounded bg-gray-700"
+                    />
+
                     <button
                         type="submit"
-                        className="w-full py-3 bg-accent hover:bg-accent/90 text-white font-semibold rounded-xl transition-all shadow-lg shadow-accent/20"
+                        className="w-full bg-blue-600 py-2 rounded hover:bg-blue-700"
                     >
                         Sign Up
                     </button>
                 </form>
-
-                <p className="mt-6 text-center text-neutral-400">
-                    Already have an account? <Link to="/login" className="text-accent hover:underline">Log in</Link>
-                </p>
             </div>
         </div>
     );
