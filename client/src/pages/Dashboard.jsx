@@ -6,7 +6,7 @@ const Dashboard = () => {
     const [balance, setBalance] = useState(0);
     const [loading, setLoading] = useState(false);
 
-    // ✅ Fetch user + balance when page loads
+    // Get logged in user
     useEffect(() => {
         const storedUser = localStorage.getItem("user");
         if (storedUser) {
@@ -14,20 +14,24 @@ const Dashboard = () => {
         }
     }, []);
 
-    // ✅ Get balance from backend
+    // Fetch balance
     const fetchBalance = async () => {
         setLoading(true);
         try {
             const res = await axios.get(
-                "http://localhost:5000/api/user/balance",
+                "https://bank-project-jtvq.onrender.com/api/user/balance",
                 { withCredentials: true }
             );
-
             setBalance(res.data.balance || 0);
         } catch (err) {
             console.log("Balance error:", err);
         }
         setLoading(false);
+    };
+
+    const logout = () => {
+        localStorage.removeItem("user");
+        window.location.href = "/";
     };
 
     return (
@@ -47,7 +51,12 @@ const Dashboard = () => {
 
                 <div className="mt-20 space-y-3">
                     <p className="cursor-pointer hover:text-blue-400">Settings</p>
-                    <p className="cursor-pointer hover:text-red-400">Logout</p>
+                    <p
+                        className="cursor-pointer hover:text-red-400"
+                        onClick={logout}
+                    >
+                        Logout
+                    </p>
                 </div>
             </div>
 
@@ -56,13 +65,13 @@ const Dashboard = () => {
 
                 {/* Welcome */}
                 <h1 className="text-3xl font-bold mb-6">
-                    Welcome Back, {user?.username}
+                    Welcome Back, {user?.username || "User"}
                 </h1>
 
                 {/* Cards */}
                 <div className="grid md:grid-cols-3 gap-6">
 
-                    {/* Total Balance */}
+                    {/* Balance Card */}
                     <div className="bg-gray-800 p-6 rounded-xl">
                         <h3 className="text-gray-400">Total Balance</h3>
                         <p className="text-2xl font-bold mt-2">
@@ -77,7 +86,7 @@ const Dashboard = () => {
                         </button>
                     </div>
 
-                    {/* Monthly Income */}
+                    {/* Income */}
                     <div className="bg-gray-800 p-6 rounded-xl">
                         <h3 className="text-gray-400">Monthly Income</h3>
                         <p className="text-2xl text-green-400 font-bold mt-2">
