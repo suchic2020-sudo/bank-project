@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 const Dashboard = () => {
     const [user, setUser] = useState(null);
@@ -14,24 +13,20 @@ const Dashboard = () => {
         }
     }, []);
 
-    // Fetch balance
-    const fetchBalance = async () => {
+    // Show ₹100000 when clicking check balance
+    const fetchBalance = () => {
         setLoading(true);
-        try {
-            const res = await axios.get(
-                "http://localhost:5000/api/user/balance",
-                { withCredentials: true }
-            );
-            setBalance(res.data.balance || 0);
-        } catch (err) {
-            console.log("Balance error:", err);
-        }
-        setLoading(false);
+
+        setTimeout(() => {
+            setBalance(100000); // IMPORTANT: sets ₹100000
+            setLoading(false);
+        }, 500);
     };
 
+    // Logout
     const logout = () => {
         localStorage.removeItem("user");
-        window.location.href = "/";
+        window.location.href = "/#/login";
     };
 
     return (
@@ -63,17 +58,17 @@ const Dashboard = () => {
             {/* MAIN CONTENT */}
             <div className="flex-1 p-10">
 
-                {/* Welcome */}
                 <h1 className="text-3xl font-bold mb-6">
                     Welcome Back, {user?.username || "User"}
                 </h1>
 
-                {/* Cards */}
+                {/* CARDS */}
                 <div className="grid md:grid-cols-3 gap-6">
 
-                    {/* Balance Card */}
+                    {/* BALANCE CARD */}
                     <div className="bg-gray-800 p-6 rounded-xl">
                         <h3 className="text-gray-400">Total Balance</h3>
+
                         <p className="text-2xl font-bold mt-2">
                             ₹ {loading ? "Loading..." : balance}
                         </p>
@@ -86,7 +81,7 @@ const Dashboard = () => {
                         </button>
                     </div>
 
-                    {/* Income */}
+                    {/* INCOME */}
                     <div className="bg-gray-800 p-6 rounded-xl">
                         <h3 className="text-gray-400">Monthly Income</h3>
                         <p className="text-2xl text-green-400 font-bold mt-2">
@@ -94,7 +89,7 @@ const Dashboard = () => {
                         </p>
                     </div>
 
-                    {/* Expenses */}
+                    {/* EXPENSE */}
                     <div className="bg-gray-800 p-6 rounded-xl">
                         <h3 className="text-gray-400">Expenses</h3>
                         <p className="text-2xl text-red-400 font-bold mt-2">

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { LogIn, User, Lock } from 'lucide-react';
 
 const Login = () => {
@@ -12,14 +11,20 @@ const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            const res = await axios.post('http://localhost:5000/api/auth/login', formData, { withCredentials: true });
-            localStorage.setItem('user', JSON.stringify(res.data.user));
-            navigate('/dashboard');
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === formData.username && u.password === formData.password);
+
+            if (user) {
+                localStorage.setItem('user', JSON.stringify(user));
+                navigate('/dashboard');
+            } else {
+                setError('Invalid username or password');
+            }
         } catch (err) {
-            setError(err.response?.data?.message || 'Login failed');
+            setError('Login failed');
         }
     };
 

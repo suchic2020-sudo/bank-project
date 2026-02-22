@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
 import { UserPlus, User, Mail, Phone, Lock } from 'lucide-react';
 
 const Register = () => {
@@ -18,13 +17,27 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/auth/register', formData);
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const userExists = users.some(u => u.username === formData.username);
+
+            if (userExists) {
+                setError('Username already exists');
+                return;
+            }
+
+            const newUser = {
+                ...formData,
+                balance: 0
+            };
+
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
             navigate('/login');
         } catch (err) {
-            setError(err.response?.data?.message || 'Registration failed');
+            setError('Registration failed');
         }
     };
 
